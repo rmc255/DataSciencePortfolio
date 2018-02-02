@@ -1,0 +1,87 @@
+foo<-function(){
+location<-readline("Enter the filepath for your data ")
+mydata<-read.csv(location)
+attach(mydata)
+print("Here are the variables you've given me. Which two would you like to analyze today?")
+print(names(mydata))
+Xname<-readline("Enter your X parameter name here ")
+Yname<-readline("Enter your Y parameter name here ")
+X<-cbind(subset(mydata, select = c(Xname)))
+Y<-cbind(subset(mydata, select = c(Yname)))
+print("Here's a plot of the data you gave me! On it you will see a cubic smoothing spline")
+Xdata<-as.vector(X)
+Ydata<-as.vector(Y)
+plot(mydata[[Xname]],mydata[[Yname]])
+lines(smooth.spline(mydata[[Xname]],mydata[[Yname]]))
+}
+foo2<-function(){
+  location<-readline("Enter the filepath for your data ")
+  mydata<-read.csv(location)
+  attach(mydata)
+  print("Here are the variables you've given me. Which two would you like to analyze today?")
+  print(names(mydata))
+  Xname<-readline("Enter your X parameter name here ")
+  Yname<-readline("Enter your Y parameter name here ")
+  
+  print("We now split the data into 3 groups")
+  C<-as.integer(3)
+  C1<-round(nrow(mydata)/3)
+  C3<-nrow(mydata)-C1
+  Group1<-cbind(mydata[1:(C1-1),])
+  Group2<-cbind(mydata[C1:(C3-1),])
+  Group3<-cbind(mydata[C3:nrow(mydata),])
+  f1<-lm(X.disaster~year, data = Group1)
+  f2<-lm(X.disaster~year, data = Group2)
+  f3<-lm(X.disaster~year, data = Group3)
+  
+  data0<-rbind(coef(f1))
+  data1<-rbind(coef(f2))
+  data2<-rbind(coef(f3))
+  data0<-rbind(data0, data1)
+  data0<-rbind(data0, data2)
+  data0
+  
+
+  print("Here is the plot for the first regression")
+  plot(Group1[[Xname]],Group1[[Yname]])
+  abline(f1)
+  invisible(readline("press enter to continue"))
+  print("Here is the plot for the second regression")
+  plot(Group2[[Xname]],Group2[[Yname]])
+  abline(f2)
+  invisible(readline("press enter to continue"))
+  print("Here is the plot for the third regression")
+  plot(Group3[[Xname]],Group3[[Yname]])
+  abline(f3)
+  
+}
+foo3<-function(){
+  location<-readline("Enter the filepath for your data ")
+  mydata<-read.csv(location)
+  attach(mydata)
+  print("Here are the variables you've given me. Which two would you like to analyze today?")
+  print(names(mydata))
+  Xname<-readline("Enter your X parameter name here ")
+  Yname<-readline("Enter your Y parameter name here ")
+  
+  C<-as.integer(3)
+  C1<-round(nrow(mydata)/3)
+  C3<-nrow(mydata)-C1
+  Group1<-cbind(mydata[1:(C1-1),])
+  Group2<-cbind(mydata[C1:(C3-1),])
+  Group3<-cbind(mydata[C3:nrow(mydata),])
+  f1<-lm(X.disaster~year, data = Group1)
+  f2<-lm(X.disaster~year, data = Group2)
+  f3<-lm(X.disaster~year, data = Group3)
+  
+  data0<-rbind(coef(f1))
+  data1<-rbind(coef(f2))
+  data2<-rbind(coef(f3))
+  data0<-rbind(data0, data1)
+  data0<-rbind(data0, data2)
+  data0;
+  
+}
+#note that you must run the functions one at a time. 
+#Run foo() complete its inputs and then run foo2() and then 
+#foo3(). Sorry for the complication, I'm working out the kinks.
